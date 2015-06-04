@@ -1,0 +1,14 @@
+Show view!
+<div ng-init="showTeam()">
+    <div>
+        <h1>{{ team.name }}</h1>
+        <h2>{{ team.slogan }}</h2>
+    </div>
+
+    <div>
+        <ul class="pure-menu pure-menu-horizontal">
+            <li class="pure-menu-item"><a class="pure-menu-link" href="#/teams/edit/{{ team._id}}">Edit</a></li>
+            <li class="pure-menu-item"><a class="pure-menu-link" ng-click="removeTeam(team._id)">Delete {{ team.name}}</a></li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>myCongress</title>
+	<link rel="stylesheet" href="css/pure-min.css">
+</head>
+<body>
+	<header>
+		<div>
+			<a class="pure-button pure-button-primary" href="#/new">Sign Up</a>
+		</div>
+		<h1>myCongress</h1>
+	</header>
+
+	<div ng-app="myCongress">
+		<div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
+			<ul class="pure-menu-list">
+				<li class="pure-menu-item"><a class="pure-menu-link" href="#/">Home</a></li>
+				<li class="pure-menu-item"><a class="pure-menu-link" href="#/list">Users</a></li>
+				<li class="pure-menu-item"><a class="pure-menu-link" href="#/teams">Teams</a></li>
+			</ul>
+		</div>
+
+		<div ng-view></div>
+
+	</div>
+
+	<script src="js/angular.js"></script>
+	<script src="js/angular-route.js"></script>
+	<script src="js/app.js"></script>
+
+</body>
+</html>

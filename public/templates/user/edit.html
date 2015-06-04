@@ -1,0 +1,8 @@
+<div ng-init="showUser()">
+    <h2>Hey {{ person.name }}, looking for an update?</h2>
+    <form class="pure-form pure-form-stacked">
+        <input type="text" placeholder="name.." ng-model="person.name">
+        <input type="text" placeholder="email.." ng-model="person.email">
+        <button class="pure-button" ng-click="updateUser()">edit!</button>
+    </form>
+</div>

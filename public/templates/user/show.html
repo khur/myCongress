@@ -1,0 +1,14 @@
+<div ng-init="showUser()">
+    <div>
+       <h2> this is a show view for: <h1>{{ person.name }}</h1></h2>
+    </div>
+    <div>
+        <ul class="pure-menu pure-menu-horizontal">
+            <li class="pure-menu-item"><a class="pure-menu-link" href="#/edit/{{ person._id}}">Edit</a></li>
+            <li class="pure-menu-item"><a class="pure-menu-link" ng-click="remove(person._id)">Delete {{ person.name}}</a></li>
+        </ul>
+    </div>
+</div>
+<div>
+    debug: {{ person }}
+</div>

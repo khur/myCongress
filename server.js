@@ -3,7 +3,7 @@ var app = express();
 var mongojs = require('mongojs');
 var bodyParser = require('body-parser');
 
-var db = mongojs('myCongress', ['user', 'team']);
+var db = mongojs('myCongress', ['user', 'team', 'league']);
 
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
@@ -133,6 +133,71 @@ app.delete('/teams/:id', function (request, response) {
 		response.json(result);
 	});
 });// end Delete request
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+			///////////////////////////////////////////
+			//////////      LEAGUE API    /////////////
+			///////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// Get a list of LEAGUES request
+app.get('/leagues', function (request, response){
+	console.log("I got a GET request for leagues!");
+	db.league.find(function (err, result) {
+		console.log("this is the list of leagues:" + result);
+		response.json(result);
+	})
+}); //  End List of LEAGUES request
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// Get a Single LEAGUE
+app.get('/leagues/:id', function(request, response){
+	var id = request.params.id;
+	console.log(id);
+	db.league.findOne({_id: mongojs.ObjectId(id)}, function(err, result){
+		console.log("this is the single league:" + result);
+		response.json(result);
+	});
+}); //End Single LEAGUE GET
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// Creates a LEAGUE POST request
+app.post('/leagues', function (request, response) {
+	console.log("this is a post request" + request.body);
+	db.league.insert(request.body, function (err, result) {
+		response.json(result);
+	});
+});// End Create LEAGUE request
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// UPDATE LEAGUE
+app.put('/leagues/:id', function (request, response) {
+	var id = request.params.id;
+	console.log(request.body.name);
+	db.league.findAndModify({query: {_id: mongojs.ObjectId(id)},
+		update: {$set: {name: request.body.name }},
+		new: true}, function (err, result) {
+		console.log("this is the new league:" + result.name);
+		response.json(result);
+	});
+
+}); //End LEAGUE PUT request
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// DELETE LEAGUE
+app.delete('/leagues/:id', function (request, response) {
+	var id = request.params.id;
+	console.log(id);
+	db.league.remove({_id:mongojs.ObjectId(id)}, function (err, result){
+		response.json(result);
+	});
+});// End LEAGUE Delete request
 
 //////////////////////////////////////////////////////////////////////////////////////
 

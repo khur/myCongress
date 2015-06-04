@@ -1,0 +1,10 @@
+<div ng-init="showLeague()">
+    <h1>{{ league.name}}</h1>
+
+    <div>
+        <ul class="pure-menu pure-menu-horizontal">
+            <li class="pure-menu-item"><a class="pure-menu-link" href="#/leagues/edit/{{ league._id}}">Edit</a></li>
+            <li class="pure-menu-item"><a class="pure-menu-link" ng-click="removeLeague(league._id)">Delete {{ league.name}}</a></li>
+        </ul>
+    </div>
+</div>

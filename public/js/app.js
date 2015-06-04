@@ -20,7 +20,7 @@ angular.module('myCongress')
     ).when('/user/:id', {
             templateUrl: '../templates/user/show.html',
             controller: 'userController'
-            //serves the show USER patrial
+            //serves the show USER partial
         }
     ).when('/edit/:id', {
            templateUrl: '../templates/user/edit.html',
@@ -45,12 +45,44 @@ angular.module('myCongress')
     ).when('/teams/edit/:id', {
             templateUrl: '../templates/team/edit.html',
             controller: 'teamController'
-            // server the TEAM edit partial
+            // serves the TEAM edit partial
+        }
+    ).when('/leagues', {
+            templateUrl: '../templates/league/list.html',
+            controller: 'leagueController'
+            // serves the LEAGUE list partial
+        }
+    ).when('/leagues/new', {
+            templateUrl: '../templates/league/new.html',
+            controller: 'leagueController'
+            // serves the new LEAGUE partial
+        }
+    ).when('/leagues/:id', {
+            templateUrl: '../templates/league/show.html',
+            controller: 'leagueController'
+            // serves the show LEAGUE partial
+        }
+    ).when('/leagues/edit/:id', {
+            templateUrl: '../templates/league/edit.html',
+            controller: 'leagueController'
+            // serves the edit LEAGUE partial
         }
     ).otherwise(
         '/' //redirects to the root page
     );
 }); // Ends Config Function
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////                                             /////////////////////////
+////////////////////////        USER, TEAM, LEAGUE CONTROLLERS       /////////////////////////
+////////////////////////                                             /////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////
+        /////////      USER CONTROLLER      ///////////
+        ///////////////////////////////////////////////
+
 
 angular.module('myCongress')
 	.controller('userController', userController);
@@ -156,7 +188,7 @@ angular.module('myCongress')
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
 
-
+        $scope.teamMessage = 'this is from team controller in league view';
         ///////////////////////////////////////////////
         ///////////////////////////////////////////////
         ///////////////////////////////////////////////
@@ -235,7 +267,100 @@ angular.module('myCongress')
         ///////////////////////////////////////////////
 
 
-
-
-
     }// End teamController
+
+
+        //////////////////////////////////////////////////////
+        ///////////////    LEAGUE CONTROLLER    //////////////
+        //////////////////////////////////////////////////////
+
+angular.module('myCongress')
+    .controller('leagueController', leagueController);
+
+teamController.$inject = ["$scope", "$route", "$http", "$routeParams", "$location"];
+
+function leagueController($scope, $route, $http, $routeParams, $location){
+    $scope.$route = $route;
+    $scope.$location = $location;
+    $scope.$routeParams = $routeParams;
+
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+
+    // Gets a list of LEAGUES
+
+    $http.get('/leagues').success(function(response){
+        console.log("i got the leagues" + response);
+        $scope.leagues = response;
+    }); //End list of league GET request
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+    // Gets a single LEAGUE
+
+    $scope.showLeague = function() {
+        var url = '/leagues/' + $routeParams.id;
+        console.log(url);
+        $http.get('/leagues/' + $routeParams.id).success(function (response) {
+            $scope.league = response;
+            console.log($scope.league);
+        });
+    };
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+    // Creates a LEAGUE
+
+    $scope.createLeague = function(){
+        console.log("New League:" + $scope.newLeague);
+        $http.post('/leagues', $scope.newLeague).success(function(response){
+            $scope.league = response;
+            console.log("this is what i posted:" + $scope.league);
+            $location.path('/leagues/' + response._id);
+        });
+        return $scope.newLeague = '';
+    };
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+    // Updates a LEAGUE
+
+    $scope.updateLeague = function () {
+        console.log($scope.league._id);
+        $http.put('/leagues/' + $scope.league._id, $scope.league)
+            .success(function(response){
+                $location.path('/leagues/' + $scope.league._id);
+            }).error(function(err){
+                console.log(err);
+            });
+
+    }; // End LEAGUE Update function
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+    // Removes a LEAGUE
+    $scope.removeLeague = function (id) {
+        console.log(id);
+        $http.delete('/leagues/' + id).success(function (response) {
+            console.log("league is gone!");
+            $location.path('/');
+        });
+    };// End remove LEAGUE
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+
+}// End teamController

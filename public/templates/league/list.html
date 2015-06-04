@@ -1,1 +1,9 @@
-this is the league list view
+<div>
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item" ng-repeat="league in leagues"><a href="#/leagues/{{ league._id }}">{{ league.name }}</a></li>
+    </ul>
+</div>
+<br>
+<div>
+    {{ leagues }}
+</div>

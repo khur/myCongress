@@ -51,7 +51,23 @@ angular.module('myCongress')
             templateUrl: '../templates/league/list.html',
             controller: 'leagueController'
             // serves the LEAGUE list partial
-        }).otherwise(
+        }
+    ).when('/leagues/new', {
+            templateUrl: '../templates/league/new.html',
+            controller: 'leagueController'
+            // serves the new LEAGUE partial
+        }
+    ).when('/leagues/:id', {
+            templateUrl: '../templates/league/show.html',
+            controller: 'leagueController'
+            // serves the show LEAGUE partial
+        }
+    ).when('/leagues/edit/:id', {
+            templateUrl: '../templates/league/edit.html',
+            controller: 'leagueController'
+            // serves the edit LEAGUE partial
+        }
+    ).otherwise(
         '/' //redirects to the root page
     );
 }); // Ends Config Function
@@ -172,7 +188,7 @@ angular.module('myCongress')
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
 
-
+        $scope.teamMessage = 'this is from team controller in league view';
         ///////////////////////////////////////////////
         ///////////////////////////////////////////////
         ///////////////////////////////////////////////
@@ -278,7 +294,7 @@ function leagueController($scope, $route, $http, $routeParams, $location){
 
     $http.get('/leagues').success(function(response){
         console.log("i got the leagues" + response);
-        $scope.teams = response;
+        $scope.leagues = response;
     }); //End list of league GET request
 
     ///////////////////////////////////////////////
@@ -291,7 +307,7 @@ function leagueController($scope, $route, $http, $routeParams, $location){
         var url = '/leagues/' + $routeParams.id;
         console.log(url);
         $http.get('/leagues/' + $routeParams.id).success(function (response) {
-            $scope.team = response;
+            $scope.league = response;
             console.log($scope.league);
         });
     };
@@ -300,11 +316,11 @@ function leagueController($scope, $route, $http, $routeParams, $location){
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
 
-    // Creates a TEAM
+    // Creates a LEAGUE
 
     $scope.createLeague = function(){
         console.log("New League:" + $scope.newLeague);
-        $http.post('/teams', $scope.newLeague).success(function(response){
+        $http.post('/leagues', $scope.newLeague).success(function(response){
             $scope.league = response;
             console.log("this is what i posted:" + $scope.league);
             $location.path('/leagues/' + response._id);

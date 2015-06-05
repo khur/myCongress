@@ -3,9 +3,9 @@ angular.module('myCongress', ['ngRoute']);
 angular.module('myCongress')
 	.config(function($routeProvider){
 
-        ////////////////////////////////////////
-        //////// ANGULAR ROUTING ///////////////
-        ////////////////////////////////////////
+        ////////=================//////////
+        //////// ANGULAR ROUTING //////////
+        ////////=================//////////
 
 	$routeProvider.
 	when('/list', {
@@ -32,7 +32,7 @@ angular.module('myCongress')
             controller: 'teamController'
             // serves list of TEAMS partial
         }
-    ).when('/teams/new', {
+    ).when('/leagues/:league_id/teams/new', {
             templateUrl: '../templates/team/new.html',
             controller: 'teamController'
             // serves new TEAM partial
@@ -73,15 +73,15 @@ angular.module('myCongress')
 }); // Ends Config Function
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////=============================================/////////////////////////
 ////////////////////////                                             /////////////////////////
 ////////////////////////        USER, TEAM, LEAGUE CONTROLLERS       /////////////////////////
 ////////////////////////                                             /////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////=============================================/////////////////////////
 
-        ///////////////////////////////////////////////
+        /////////===========================///////////
         /////////      USER CONTROLLER      ///////////
-        ///////////////////////////////////////////////
+        /////////===========================///////////
 
 
 angular.module('myCongress')
@@ -174,9 +174,9 @@ angular.module('myCongress')
 
 
 
-        //////////////////////////////////////////////////////
+        ///////////////=========================//////////////
         ///////////////     TEAM CONTROLLER     //////////////
-        //////////////////////////////////////////////////////
+        ///////////////=========================//////////////
 
     angular.module('myCongress')
         .controller('teamController', teamController);
@@ -223,12 +223,19 @@ angular.module('myCongress')
         // Creates a TEAM
 
         $scope.createTeam = function(){
+
+            $scope.newTeam.league_id = $routeParams.league_id;
+            var url = '/teams';
+            console.log(url);
             console.log("New Team:" + $scope.newTeam);
-            $http.post('/teams', $scope.newTeam).success(function(response){
-                $scope.team = response;
-                console.log("this is what i posted:" + $scope.team);
-                $location.path('/teams/' + response._id);
-            });
+
+            $http.post( url, $scope.newTeam)
+                .success(function(response){
+                    $scope.team = response;
+                    console.log("this is what i posted:" + $scope.team);
+                    $location.path('/teams/' + response._id);
+                    })
+                .error(function(message){console.log(message)});
             return $scope.newTeam = '';
         };
 
@@ -270,9 +277,9 @@ angular.module('myCongress')
     }// End teamController
 
 
-        //////////////////////////////////////////////////////
+        ///////////////=========================//////////////
         ///////////////    LEAGUE CONTROLLER    //////////////
-        //////////////////////////////////////////////////////
+        ///////////////=========================//////////////
 
 angular.module('myCongress')
     .controller('leagueController', leagueController);
@@ -306,10 +313,22 @@ function leagueController($scope, $route, $http, $routeParams, $location){
     $scope.showLeague = function() {
         var url = '/leagues/' + $routeParams.id;
         console.log(url);
-        $http.get('/leagues/' + $routeParams.id).success(function (response) {
+
+        //=== request for the single league
+
+        $http.get(url).success(function (response) {
             $scope.league = response;
-            console.log($scope.league);
+            console.dir($scope.league);
         });
+
+        //==== changes URL params
+        url = '/leagues/' +  $routeParams.id + '/teams';
+        //==== Gets a list of Single League Teams
+        $http.get(url).success(function (response) {
+            $scope.leagueTeams = response;
+            console.log(response);
+        });
+        console.log("this is last");
     };
 
     ///////////////////////////////////////////////
@@ -362,5 +381,22 @@ function leagueController($scope, $route, $http, $routeParams, $location){
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
 
+    // Gets a list of Single League Teams
 
-}// End teamController
+    //$scope.getLeagueTeams = function(id){
+    //    console.log("I RAN THE GET LEAGUES FUNCTION");
+    //    console.log("this is the leagues id: " + id);
+    //    var url = '/leagues/' + id + '/teams';
+    //
+    //    $http.get(url).success(function (response) {
+    //        $scope.leagueTeams = response;
+    //        console.dir(response);
+    //    });
+    //}; // End getLeagueTeams
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+
+}// End leagueController

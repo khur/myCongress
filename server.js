@@ -8,10 +8,10 @@ var db = mongojs('myCongress', ['user', 'team', 'league']);
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 
-app.get('/', function (request, response){
-	console.log("I got a GET request!");
-	response.send('home.html')
-});
+//app.get('/', function (request, response){
+//	console.log("I got a GET request!");
+//	//response.send('home.html')
+//});
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -103,6 +103,7 @@ app.get('/teams/:id', function(request, response){
 
 // Creates a Team POST request
 app.post('/teams', function (request, response) {
+	console.log("lets create a team!");
 	console.log("this is a post request" + request.body);
 	db.team.insert(request.body, function (err, result) {
 		response.json(result);
@@ -158,7 +159,7 @@ app.get('/leagues/:id', function(request, response){
 	var id = request.params.id;
 	console.log(id);
 	db.league.findOne({_id: mongojs.ObjectId(id)}, function(err, result){
-		console.log("this is the single league:" + result);
+		console.log("this is the single league: \n" + result.body);
 		response.json(result);
 	});
 }); //End Single LEAGUE GET
@@ -201,5 +202,22 @@ app.delete('/leagues/:id', function (request, response) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+// Gets a list of TEAMS in a LEAGUE
+
+app.get('/leagues/:id/teams', function(request, response){
+	console.log("\n Inside league/:id/teams");
+	var id = request.params.id;
+	console.log("id for list of teams:  " + id);
+	console.log("I WAS ASKED FOR TEAM IN A LEAGUE!");
+
+	db.team.find({league_id: id}, function(err, docs) {
+		if (err) console.log(err);
+		console.log("this is the list of specific teams in league: " + docs);
+		response.json(docs);
+	});
+
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
 app.listen(3000);
 console.log("Server running on port 3000!");

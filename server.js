@@ -2,11 +2,79 @@ var express = require('express');
 var app = express();
 var mongojs = require('mongojs');
 var bodyParser = require('body-parser');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 var db = mongojs('myCongress', ['user', 'team', 'league']);
 
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+passport.use(new LocalStrategy(
+	function(username, password, done) {
+
+		console.log("I'm in local strategy \n");
+
+
+		db.user.find({username: username}, function (err, user) {
+			console.log(user);
+			if(user[0].username === username && user[0].password === password ){
+				return done(null, {message: "welcome" + user.name});
+			}else{
+				return done(null, false, {message: "Incorrect Credentials"});
+			}
+
+		});
+		//if (username === "admin" && password === "admin") // stupid example
+		//	return done(null, {name: "admin"});
+        //
+		//return done(null, false, { message: 'Incorrect username.' });
+	}
+));
+
+// Serialized and deserialized methods when got from session
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+	done(null, user);
+});
+
+// Define a middleware function to be used for every secured routes
+
+var auth = function(request, response, next) {
+
+	if (!request.isAuthenticated()) response.send(401);
+
+	else next();
+};
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+app.get('/loggedin', function(request, response) {
+	response.send(request.isAuthenticated() ? request.user : '0');
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// route to log in
+app.post('/login', passport.authenticate('local'), function(request, response) {
+	response.send(request.user);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// route to log out
+app.post('/logout', function(request, response){
+	request.logOut();
+	response.send(200);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 //app.get('/', function (request, response){
 //	console.log("I got a GET request!");
@@ -20,7 +88,7 @@ app.get('/users', function (request, response){
 	console.log("I got a GET request for users!");
 	db.user.find(function (err, result) {
 		// console.log(result);
-		response.json("./index.html", result);
+		response.json(result);
 	})
 }); // End List of Users request
 
@@ -64,7 +132,7 @@ app.put('/users/:id', function (request, response) {
 	var id = request.params.id;
 	console.log(request.body.name);
 	db.user.findAndModify({query: {_id: mongojs.ObjectId(id)},
-		update: {$set: {name: request.body.name, email: request.body.email}},
+		update: {$set: {name: request.body.name, email: request.body.email, username: request.body.username, password: request.body.password}},
 		new: true}, function (err, result) {
 			response.json(result);
 	});
@@ -72,9 +140,9 @@ app.put('/users/:id', function (request, response) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-		///////////////////////////////////////////
-		//////////// TEAM API /////////////////////
-		///////////////////////////////////////////
+					///////////////////////////////////////////
+					//////////// TEAM API /////////////////////
+					///////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -117,7 +185,7 @@ app.put('/teams/:id', function (request, response) {
 	var id = request.params.id;
 	console.log(request.body.name);
 	db.team.findAndModify({query: {_id: mongojs.ObjectId(id)},
-		update: {$set: {name: request.body.name, email: request.body.slogan}},
+		update: {$set: {name: request.body.name, vp: request.body.vp}},
 		new: true}, function (err, result) {
 		console.log("this is the new team:" + result.name);
 		response.json(result);
@@ -127,7 +195,7 @@ app.put('/teams/:id', function (request, response) {
 //////////////////////////////////////////////////////////////////////////////////////
 
 // DELETE TEAM
-app.delete('/teams/:id', function (request, response) {
+app.delete('/teams/:id', auth, function (request, response) {
 	var id = request.params.id;
 	console.log(id);
 	db.team.remove({_id:mongojs.ObjectId(id)}, function (err, result){
@@ -137,9 +205,9 @@ app.delete('/teams/:id', function (request, response) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-			///////////////////////////////////////////
-			//////////      LEAGUE API    /////////////
-			///////////////////////////////////////////
+						///////////////////////////////////////////
+						//////////      LEAGUE API    /////////////
+						///////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////
 

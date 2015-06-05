@@ -8,7 +8,9 @@
     "body-parser": "^1.12.4",
     "express": "^4.12.4",
     "mongodb": "^1.4.38",
-    "mongojs": "^0.18.2"
+    "mongojs": "^0.18.2",
+    "passport": "^0.2.2",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {

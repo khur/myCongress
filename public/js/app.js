@@ -1,7 +1,60 @@
 angular.module('myCongress', ['ngRoute']);
 
 angular.module('myCongress')
-	.config(function($routeProvider){
+	.config(function($routeProvider, $httpProvider){
+
+        ////////////////////////////////////////////////////////////////////////
+                        // Check if the user is connected //
+        ////////////////////////////////////////////////////////////////////////
+
+        var checkLoggedin = function($q, $timeout, $http, $location, $rootScope){
+            // Initialize a new promise
+            var deferred = $q.defer();
+
+            // Make an AJAX call to check if the user is logged in
+            $http.get('/loggedin').success(function(user){
+                // Authenticated
+                if (user !== '0'){
+                /*$timeout(deferred.resolve, 0);*/
+                    deferred.resolve();
+                    console.log(user);
+
+                // Not Authenticated
+                }else {
+                    $rootScope.message = 'You need to log in.';
+                    //$timeout(function(){deferred.reject();}, 0);
+                    deferred.reject();
+                    $location.url('/login');
+                }
+            });
+
+            return deferred.promise;
+        };
+
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+
+
+        ////////////////////////////////////////////////////
+        //       Add an interceptor for AJAX errors       //
+        ////////////////////////////////////////////////////
+
+        $httpProvider.interceptors.push(function($q, $location) {
+            return {
+                response: function(response) {
+                    // do something on success
+                    return response;
+                },
+                responseError: function(response) {
+                    if (response.status === 401)
+                        $location.url('/login');
+                    return $q.reject(response);
+                }
+            };
+        });
+
+
 
         ////////=================//////////
         //////// ANGULAR ROUTING //////////
@@ -10,21 +63,34 @@ angular.module('myCongress')
 	$routeProvider.
 	when('/list', {
 		templateUrl: '../templates/user/list.html',
-		controller: 'userController'
-		//serves the list of USERS partial
-	}).when('/new', {
+		controller: 'userController',
+            resolve: {
+                loggedin: checkLoggedin
+            }//serves the list of USERS partial
+	}).when('/login', {
+            templateUrl: '../templates/registration/login.html',
+            controller: 'LoginCtrl'
+            // login in form
+        }
+    ).when('/new', {
             templateUrl: '../templates/user/new.html',
             controller: 'userController'
             //serves the new USER partial
         }
     ).when('/user/:id', {
             templateUrl: '../templates/user/show.html',
-            controller: 'userController'
+            controller: 'userController',
+            resolve: {
+                loggedin: checkLoggedin
+            }
             //serves the show USER partial
         }
     ).when('/edit/:id', {
            templateUrl: '../templates/user/edit.html',
-            controller: 'userController'
+            controller: 'userController',
+            resolve: {
+                loggedin: checkLoggedin
+            }
             // serves the USER edit form
         }
     ).when('/teams', {
@@ -34,7 +100,10 @@ angular.module('myCongress')
         }
     ).when('/leagues/:league_id/teams/new', {
             templateUrl: '../templates/team/new.html',
-            controller: 'teamController'
+            controller: 'teamController',
+            resolve: {
+                loggedin: checkLoggedin
+            }
             // serves new TEAM partial
         }
     ).when('/teams/:id',{
@@ -44,7 +113,10 @@ angular.module('myCongress')
         }
     ).when('/teams/edit/:id', {
             templateUrl: '../templates/team/edit.html',
-            controller: 'teamController'
+            controller: 'teamController',
+            resolve: {
+                loggedin: checkLoggedin
+            }
             // serves the TEAM edit partial
         }
     ).when('/leagues', {
@@ -54,7 +126,10 @@ angular.module('myCongress')
         }
     ).when('/leagues/new', {
             templateUrl: '../templates/league/new.html',
-            controller: 'leagueController'
+            controller: 'leagueController',
+            resolve: {
+                loggedin: checkLoggedin
+            }
             // serves the new LEAGUE partial
         }
     ).when('/leagues/:id', {
@@ -64,14 +139,25 @@ angular.module('myCongress')
         }
     ).when('/leagues/edit/:id', {
             templateUrl: '../templates/league/edit.html',
-            controller: 'leagueController'
+            controller: 'leagueController',
+            resolve: {
+                loggedin: checkLoggedin
+            }
             // serves the edit LEAGUE partial
         }
     ).otherwise(
         '/' //redirects to the root page
     );
-}); // Ends Config Function
+}) // Ends Config Function
+    .run(function($rootScope, $http){
+        $rootScope.message = '';
+        // Logout function is available in any page
+        $rootScope.logout = function(){
+            //$rootScope.message = 'Logged out.';
+            $http.post('/logout');
+        };
 
+    });
 
 ////////////////////////=============================================/////////////////////////
 ////////////////////////                                             /////////////////////////
@@ -400,3 +486,32 @@ function leagueController($scope, $route, $http, $routeParams, $location){
 
 
 }// End leagueController
+
+        ///////////////=========================//////////////
+        ///////////////     LOGIN CONTROLLER    //////////////
+        ///////////////=========================//////////////
+
+angular.module('myCongress')
+    .controller('LoginCtrl', function($scope, $rootScope, $http, $location) {
+    // This object will be filled by the form
+    $scope.user = {};
+
+    // Register the login() function
+    $scope.login = function(){
+        $http.post('/login', {
+            username: $scope.user.username,
+            password: $scope.user.password,
+        })
+            .success(function(user){
+                // No error: authentication OK
+                $rootScope.loginUser = $scope.user.username;
+                $rootScope.message = 'Authentication successful!';
+                $location.url('/admin');
+            })
+            .error(function(){
+                // Error: authentication failed
+                $rootScope.message = 'Authentication failed.';
+                $location.url('/login');
+            });
+    };
+});

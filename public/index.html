@@ -3,19 +3,21 @@
 <head>
 	<title>myCongress</title>
 	<link rel="stylesheet" href="css/pure-min.css">
+	<link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body ng-app="myCongress">
 	<header>
 		<div>
 			<a class="pure-button pure-button-primary" href="#/new">Sign Up</a>
-			<a href="#/leagues/new" class="pure-button pure-button-active">Create A League</a>
+			<a class="pure-button pure-button-primary" href="#/login">Login</a>
+			<a class="pure-button button-warning" href="#/" ng-click="logout()">Logout</a>
+			<a class="pure-button button-success" href="#/leagues/new" >Create A League</a>
 		</div>
+
 		<div>
 			<h1>myCongress</h1>
 		</div>
-	</header>
 
-	<div ng-app="myCongress">
 		<div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
 			<ul class="pure-menu-list">
 				<li class="pure-menu-item"><a class="pure-menu-link" href="#/">Home</a></li>
@@ -24,6 +26,12 @@
 				<li class="pure-menu-item"><a class="pure-menu-link" href="#/teams">Committees</a></li>
 			</ul>
 		</div>
+	</header>
+
+	<div id="mainContainer">
+		{{ loginUser }}
+		{{ message }}
+		
 
 		<div ng-view></div>
 

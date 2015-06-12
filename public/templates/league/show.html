@@ -1,28 +1,28 @@
 <div>
-    <a href="#/leagues/{{ league._id }}/teams/new" class="pure-button pure-button-active">Add a Committee</a>
+    <a href="#/leagues/{{ league._id }}/teams/new" class="pure-button button-success">Add a Committee</a>
 </div>
 
 <div ng-init="showLeague()">
     <h1>{{ league.name}}</h1>
     <div>
         <h2>{{ league.name}}'s Committees</h2>
-        <ul>
-            <li ng-repeat="team in leagueTeams" ><a href="#/teams/{{ team._id }}">{{ team.name }}</a></li>
+        <ul class="pure-menu-list">
+            <li ng-repeat="team in leagueTeams" class="pure-menu-item"><a href="#/teams/{{ team._id }}">{{ team.name }}</a></li>
         </ul>
     </div>
 
     <div>
         <ul class="pure-menu pure-menu-horizontal">
             <li class="pure-menu-item"><a class="pure-button pure-button-selected" href="#/leagues/edit/{{ league._id}}">Edit</a></li>
-            <li class="pure-menu-item"><a class="pure-button pure-button-active" ng-click="removeLeague(league._id)">Delete {{ league.name}}</a></li>
+            <li class="pure-menu-item"><a class="pure-button button-error" ng-click="removeLeague(league._id)">Delete {{ league.name}}</a></li>
         </ul>
     </div>
 
-    <div>
+    <!-- <div>
         <p>These are the {{ league.name }}'s teams: {{ leagueTeams }}</p>
     </div>
 
 
-     congress info: {{ league}}
+     congress info: {{ league}} -->
 </div>
 

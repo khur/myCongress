@@ -2,11 +2,93 @@ var express = require('express');
 var app = express();
 var mongojs = require('mongojs');
 var bodyParser = require('body-parser');
-
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var http = require('http');
 var db = mongojs('myCongress', ['user', 'team', 'league']);
+var request = require('request');
 
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+passport.use(new LocalStrategy(
+	function(username, password, done) {
+
+		console.log("I'm in local strategy \n");
+
+
+		db.user.find({username: username}, function (err, user) {
+			console.log(user);
+			if(user[0].username === username && user[0].password === password ) {
+				return done(null, {message: "welcome" + user.name});
+			} else{
+				return done(null, false, {message: "Incorrect Credentials"});
+			}
+		});
+		//if (username === "admin" && password === "admin") // stupid example
+		//	return done(null, {name: "admin"});
+        //
+		//return done(null, false, { message: 'Incorrect username.' });
+	}
+));
+
+// Serialized and deserialized methods when got from session
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+	done(null, user);
+});
+
+// Define a middleware function to be used for every secured routes
+
+var auth = function(request, response, next) {
+
+	if (!request.isAuthenticated()) response.send(401);
+
+	else next();
+};
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+// REQUEST SENATORS HERE
+
+request('https://congress.api.sunlightfoundation.com/legislators?per_page=all&bioguide_id=T000476&title=Sen&in_office=true&apikey=0492ff906e2042c9b4e733b9843ef779', function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    console.log(body);
+  }
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// USER LOGIN GET
+
+app.get('/loggedin', function(request, response) {
+	response.send(request.isAuthenticated() ? request.user : '0');
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// USER LOGIN POST
+
+app.post('/login', passport.authenticate('local'), function(request, response) {
+	response.send(request.user);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+//USER LOGOUT POST
+app.post('/logout', function(request, response){
+	request.logOut();
+	response.send(200);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 //app.get('/', function (request, response){
 //	console.log("I got a GET request!");
@@ -15,12 +97,20 @@ app.use(bodyParser.json());
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+
+						///////////////////////////////////////////
+						////////////     USER API      ////////////
+						///////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
 // Gets a list a users
 app.get('/users', function (request, response){
 	console.log("I got a GET request for users!");
 	db.user.find(function (err, result) {
 		// console.log(result);
-		response.json("./index.html", result);
+		response.json(result);
 	})
 }); // End List of Users request
 
@@ -64,7 +154,7 @@ app.put('/users/:id', function (request, response) {
 	var id = request.params.id;
 	console.log(request.body.name);
 	db.user.findAndModify({query: {_id: mongojs.ObjectId(id)},
-		update: {$set: {name: request.body.name, email: request.body.email}},
+		update: {$set: {name: request.body.name, email: request.body.email, username: request.body.username, password: request.body.password}},
 		new: true}, function (err, result) {
 			response.json(result);
 	});
@@ -72,9 +162,11 @@ app.put('/users/:id', function (request, response) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-		///////////////////////////////////////////
-		//////////// TEAM API /////////////////////
-		///////////////////////////////////////////
+
+					///////////////////////////////////////////
+					//////////// TEAM API /////////////////////
+					///////////////////////////////////////////
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -117,7 +209,7 @@ app.put('/teams/:id', function (request, response) {
 	var id = request.params.id;
 	console.log(request.body.name);
 	db.team.findAndModify({query: {_id: mongojs.ObjectId(id)},
-		update: {$set: {name: request.body.name, email: request.body.slogan}},
+		update: {$set: {name: request.body.name, vp: request.body.vp}},
 		new: true}, function (err, result) {
 		console.log("this is the new team:" + result.name);
 		response.json(result);
@@ -127,7 +219,7 @@ app.put('/teams/:id', function (request, response) {
 //////////////////////////////////////////////////////////////////////////////////////
 
 // DELETE TEAM
-app.delete('/teams/:id', function (request, response) {
+app.delete('/teams/:id', auth, function (request, response) {
 	var id = request.params.id;
 	console.log(id);
 	db.team.remove({_id:mongojs.ObjectId(id)}, function (err, result){
@@ -137,9 +229,11 @@ app.delete('/teams/:id', function (request, response) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-			///////////////////////////////////////////
-			//////////      LEAGUE API    /////////////
-			///////////////////////////////////////////
+
+						///////////////////////////////////////////
+						//////////      LEAGUE API    /////////////
+						///////////////////////////////////////////
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -215,6 +309,11 @@ app.get('/leagues/:id/teams', function(request, response){
 		console.log("this is the list of specific teams in league: " + docs);
 		response.json(docs);
 	});
+
+});
+
+app.get('https://congress.api.sunlightfoundation.com/legislators?per_page=all&bioguide_id=T000476&title=Sen&in_office=true&apikey=0492ff906e2042c9b4e733b9843ef779', function(request, response){
+	console.log("this is the response: " + response);
 
 });
 

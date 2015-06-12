@@ -1,0 +1,74 @@
+.button-success,
+    .button-error,
+    .button-warning,
+    .button-secondary {
+            color: white;
+            border-radius: 4px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    }
+
+        .button-success {
+            background: rgb(28, 184, 65); 
+    }
+
+        .button-error {
+            background: rgb(202, 60, 60); 
+    }
+
+        .button-warning {
+            background: rgb(223, 117, 20); 
+    }
+
+        .button-secondary {
+            background: rgb(66, 184, 221);
+    }
+
+body {
+    background-image: url("../assets/images/bg-capitol.jpg");
+    background-position: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+
+}
+
+header{
+    background-color: rgba(0, 0, 0, .4);
+}
+
+.login{
+    
+
+    margin: 5% auto;
+    width: 23%;
+    background: rgba(0, 0, 0, .4);
+    /*border: 1px solid black;*/
+    border-radius: 5px;
+    padding: 1%;
+    color: white;
+    text-align: center;
+}
+
+#login-form {
+    width: 60%;
+    margin: 0 auto;
+}
+
+#login-form > p > input{
+    color: black;
+    margin: 2%;
+
+}
+
+.pure-menu-list{
+    width: 100%;
+}
+
+.pure-menu-link {
+    color: white;
+    background: inherit;
+
+}
+
+
+

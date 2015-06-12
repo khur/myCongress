@@ -3,9 +3,9 @@ angular.module('myCongress', ['ngRoute']);
 angular.module('myCongress')
 	.config(function($routeProvider, $httpProvider){
 
-        //================================================
-        // Check if the user is connected
-        //================================================
+        ////////////////////////////////////////////////////////////////////////
+                        // Check if the user is connected //
+        ////////////////////////////////////////////////////////////////////////
 
         var checkLoggedin = function($q, $timeout, $http, $location, $rootScope){
             // Initialize a new promise
@@ -14,12 +14,13 @@ angular.module('myCongress')
             // Make an AJAX call to check if the user is logged in
             $http.get('/loggedin').success(function(user){
                 // Authenticated
-                if (user !== '0')
+                if (user !== '0'){
                 /*$timeout(deferred.resolve, 0);*/
                     deferred.resolve();
+                    console.log(user);
 
                 // Not Authenticated
-                else {
+                }else {
                     $rootScope.message = 'You need to log in.';
                     //$timeout(function(){deferred.reject();}, 0);
                     deferred.reject();
@@ -35,9 +36,9 @@ angular.module('myCongress')
         ////////////////////////////////////////////////////////////////////////
 
 
-        //================================================
-        // Add an interceptor for AJAX errors
-        //================================================
+        ////////////////////////////////////////////////////
+        //       Add an interceptor for AJAX errors       //
+        ////////////////////////////////////////////////////
 
         $httpProvider.interceptors.push(function($q, $location) {
             return {
@@ -150,12 +151,12 @@ angular.module('myCongress')
 }) // Ends Config Function
     .run(function($rootScope, $http){
         $rootScope.message = '';
-
         // Logout function is available in any page
         $rootScope.logout = function(){
             //$rootScope.message = 'Logged out.';
             $http.post('/logout');
         };
+
     });
 
 ////////////////////////=============================================/////////////////////////
@@ -503,7 +504,7 @@ angular.module('myCongress')
         })
             .success(function(user){
                 // No error: authentication OK
-                $rootScope.loginUser = 'welcome, ' + $scope.user.username;
+                $rootScope.loginUser = $scope.user.username;
                 $rootScope.message = 'Authentication successful!';
                 $location.url('/admin');
             })

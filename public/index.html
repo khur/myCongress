@@ -10,18 +10,14 @@
 		<div>
 			<a class="pure-button pure-button-primary" href="#/new">Sign Up</a>
 			<a class="pure-button pure-button-primary" href="#/login">Login</a>
-			<a class="pure-button pure-button-active" href="#/" ng-click="logout()">Logout</a>
-			<a href="#/leagues/new" class="pure-button pure-button-active">Create A League</a>
+			<a class="pure-button button-warning" href="#/" ng-click="logout()">Logout</a>
+			<a class="pure-button button-success" href="#/leagues/new" >Create A League</a>
 		</div>
-		<div>
 
+		<div>
 			<h1>myCongress</h1>
 		</div>
-	</header>
 
-	<div>
-		{{ loginUser }}
-		{{ message }}
 		<div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
 			<ul class="pure-menu-list">
 				<li class="pure-menu-item"><a class="pure-menu-link" href="#/">Home</a></li>
@@ -30,6 +26,12 @@
 				<li class="pure-menu-item"><a class="pure-menu-link" href="#/teams">Committees</a></li>
 			</ul>
 		</div>
+	</header>
+
+	<div>
+		{{ loginUser }}
+		{{ message }}
+		
 
 		<div ng-view></div>
 

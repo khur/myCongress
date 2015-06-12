@@ -4,8 +4,9 @@ var mongojs = require('mongojs');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
+var http = require('http');
 var db = mongojs('myCongress', ['user', 'team', 'league']);
+var request = require('request');
 
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
@@ -21,12 +22,11 @@ passport.use(new LocalStrategy(
 
 		db.user.find({username: username}, function (err, user) {
 			console.log(user);
-			if(user[0].username === username && user[0].password === password ){
+			if(user[0].username === username && user[0].password === password ) {
 				return done(null, {message: "welcome" + user.name});
-			}else{
+			} else{
 				return done(null, false, {message: "Incorrect Credentials"});
 			}
-
 		});
 		//if (username === "admin" && password === "admin") // stupid example
 		//	return done(null, {name: "admin"});
@@ -54,6 +54,19 @@ var auth = function(request, response, next) {
 };
 
 //////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+// REQUEST SENATORS HERE
+
+request('https://congress.api.sunlightfoundation.com/legislators?per_page=all&bioguide_id=T000476&title=Sen&in_office=true&apikey=0492ff906e2042c9b4e733b9843ef779', function (error, response, body) {
+  if (!error && response.statusCode == 200) {
+    console.log(body);
+  }
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// USER LOGIN GET
 
 app.get('/loggedin', function(request, response) {
 	response.send(request.isAuthenticated() ? request.user : '0');
@@ -61,14 +74,15 @@ app.get('/loggedin', function(request, response) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-// route to log in
+// USER LOGIN POST
+
 app.post('/login', passport.authenticate('local'), function(request, response) {
 	response.send(request.user);
 });
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-// route to log out
+//USER LOGOUT POST
 app.post('/logout', function(request, response){
 	request.logOut();
 	response.send(200);
@@ -80,6 +94,14 @@ app.post('/logout', function(request, response){
 //	console.log("I got a GET request!");
 //	//response.send('home.html')
 //});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+						///////////////////////////////////////////
+						////////////     USER API      ////////////
+						///////////////////////////////////////////
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -140,9 +162,11 @@ app.put('/users/:id', function (request, response) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+
 					///////////////////////////////////////////
 					//////////// TEAM API /////////////////////
 					///////////////////////////////////////////
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -205,9 +229,11 @@ app.delete('/teams/:id', auth, function (request, response) {
 
 //////////////////////////////////////////////////////////////////////////////////////
 
+
 						///////////////////////////////////////////
 						//////////      LEAGUE API    /////////////
 						///////////////////////////////////////////
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -283,6 +309,11 @@ app.get('/leagues/:id/teams', function(request, response){
 		console.log("this is the list of specific teams in league: " + docs);
 		response.json(docs);
 	});
+
+});
+
+app.get('https://congress.api.sunlightfoundation.com/legislators?per_page=all&bioguide_id=T000476&title=Sen&in_office=true&apikey=0492ff906e2042c9b4e733b9843ef779', function(request, response){
+	console.log("this is the response: " + response);
 
 });
 

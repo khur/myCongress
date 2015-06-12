@@ -1,13 +1,16 @@
-<h1>Login</h1>
-<form class="pure-form pure-form-stacked" ng-submit="login()">
-    <p>
-        <label class="control-label">Username</label>
-        <input type="text" placeholder="Username" ng-model="user.username" />
+<div class="login">
+	<h1>Login</h1>
+	<form id="login-form" class="pure-form pure-form-aligned" ng-submit="login()">
+	    <p>
+	        <label class="control-label">Username</label>
+	        <input type="text" placeholder="Username" ng-model="user.username" />
 
-        <label class="control-label">Password</label>
-        <input type="password" placeholder="Password" ng-model="user.password" /><br/>
+	        <label class="control-label">Password</label>
+	        <input type="password" placeholder="Password" ng-model="user.password" /><br/>
 
-        <button type="submit" class="pure-button pure-button-primary">Login</button>
-    </p>
+	        <button type="submit" class="pure-button pure-button-primary">Login</button>
+	        <a class="pure-button pure-button-primary" href="#/new">Sign Up</a>
+	    </p>
 
-</form>
+	</form>
+</div>

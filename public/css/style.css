@@ -34,6 +34,15 @@ body {
 
 header{
     background-color: rgba(0, 0, 0, .4);
+    border-bottom: 3px solid white;
+}
+
+#mainContainer{
+    width: 75%;
+    margin: 1% auto;
+    padding: 1%;
+    border: 1px solid white;
+    border-radius: 5px;
 }
 
 .login{

@@ -145,6 +145,10 @@ angular.module('myCongress')
             }
             // serves the edit LEAGUE partial
         }
+    ).when('/senators', {
+        templateUrl: '../templates/senators/list.html',
+        controller: 'SenController'
+    }
     ).otherwise(
         '/' //redirects to the root page
     );
@@ -486,6 +490,30 @@ function leagueController($scope, $route, $http, $routeParams, $location){
 
 
 }// End leagueController
+
+        ///////////////=========================//////////////
+        ///////////////    SENATOR CONTROLLER   //////////////
+        ///////////////=========================//////////////
+
+
+
+angular.module('myCongress')
+    .controller('SenController', SenController);
+
+    SenController.$inject = ["$scope", "$route", "$http", "$routeParams", "$location"];
+
+    function SenController ($scope, $route, $http, $routeParams, $location) {
+        $scope.$route = $route;
+        $scope.$location = $location;
+        $scope.$routeParams = $routeParams;
+
+        $http.get('/senators').success(function(response){
+            console.log(response);
+            $scope.senators = response;
+            console.log("i got a response back for senators second");
+        });
+
+    };
 
         ///////////////=========================//////////////
         ///////////////     LOGIN CONTROLLER    //////////////

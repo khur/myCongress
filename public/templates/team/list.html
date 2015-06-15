@@ -1,7 +1,10 @@
 <div>
-    <ul class="pure-menu-list">
-        <li class="pure-menu-item" ng-repeat="team in teams"><a href="#/teams/{{ team._id }}">{{ team.name }}</a> - {{ team.slogan }}</li>
-    </ul>
+    <div class="team-list" >
+        <div class="team-list-card" ng-repeat="team in teams">
+        	<h1><a href="#/teams/{{ team._id }}">{{ team.name }}</a></h1> 
+        	<h2>{{ team.slogan }}</h2>
+        </div>
+    </div>
 </div>
 <br>
 <!-- <div>

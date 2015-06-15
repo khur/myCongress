@@ -8,6 +8,7 @@ var http = require('http');
 var db = mongojs('myCongress', ['user', 'team', 'league']);
 var request = require('request');
 
+
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 app.use(passport.initialize());
@@ -58,12 +59,19 @@ var auth = function(request, response, next) {
 
 // REQUEST SENATORS HERE
 
-request('https://congress.api.sunlightfoundation.com/legislators?per_page=all&bioguide_id=T000476&title=Sen&in_office=true&apikey=0492ff906e2042c9b4e733b9843ef779', function (error, response, body) {
-  if (!error && response.statusCode == 200) {
-    console.log(body);
-  }
+app.get('/senators', function(req, resp){
+	console.log("I got a request for senators");
+	// console.log(req);
+	request('https://congress.api.sunlightfoundation.com/legislators?per_page=all&bioguide_id=T000476&title=Sen&in_office=true&apikey=0492ff906e2042c9b4e733b9843ef779', function (error, response, body) {
+  		if (!error && response.statusCode == 200) {
+  			console.log(body);
+  			resp.json(body);
+ 		}
 });
+})
+ 
 
+// console.log("first body" + " " + body.results);
 //////////////////////////////////////////////////////////////////////////////////////
 
 // USER LOGIN GET

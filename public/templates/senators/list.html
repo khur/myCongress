@@ -1,2 +1,15 @@
+<h1>U.S. Senators</h1>
+<div>
+    <div class="team-list" >
+        <div class="team-list-card" ng-repeat="senator in senators">
+        	<a href="#/senators/{{ senator._id }}">
+	        	<h1>Sen. {{ senator.first_name }} {{ senator.last_name }} - ({{ senator.party}})</h1> 
+	        	<h2>{{ senator.state_name }} - {{senator.state}}</h2>
+        	</a>
+        </div>
+    </div>
+</div>
 
-{{ senators }}
+<!-- div>
+	debug: {{ senators }}
+</div -->

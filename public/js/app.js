@@ -148,7 +148,11 @@ angular.module('myCongress')
     ).when('/senators', {
         templateUrl: '../templates/senators/list.html',
         controller: 'SenController'
-    }
+        }
+    ).when('/senators/:id', {
+        templateUrl: '../templates/senators/show.html',
+        controller: 'SenController'
+        }
     ).otherwise(
         '/' //redirects to the root page
     );
@@ -165,7 +169,7 @@ angular.module('myCongress')
 
 ////////////////////////=============================================/////////////////////////
 ////////////////////////                                             /////////////////////////
-////////////////////////        USER, TEAM, LEAGUE CONTROLLERS       /////////////////////////
+////////////////////        USER, TEAM, LEAGUE, SENATOR CONTROLLERS       ////////////////////
 ////////////////////////                                             /////////////////////////
 ////////////////////////=============================================/////////////////////////
 
@@ -491,6 +495,8 @@ function leagueController($scope, $route, $http, $routeParams, $location){
 
 }// End leagueController
 
+
+
         ///////////////=========================//////////////
         ///////////////    SENATOR CONTROLLER   //////////////
         ///////////////=========================//////////////
@@ -508,12 +514,27 @@ angular.module('myCongress')
         $scope.$routeParams = $routeParams;
 
         $http.get('/senators').success(function(response){
-            console.log(response);
+            // console.log(response);
             $scope.senators = response;
-            console.log("i got a response back for senators second");
         });
 
+        $scope.showSenator = function() {
+            var url = '/senators/' + $routeParams.id;
+            console.log(url);
+            $http.get(url).success(function (response) {
+                $scope.senator = response;
+                console.log("I got a response back for a single senator!")
+                console.log($scope.senator);
+            });
+        };
+
+
+
+
+
     };
+
+
 
         ///////////////=========================//////////////
         ///////////////     LOGIN CONTROLLER    //////////////

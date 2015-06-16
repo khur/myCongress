@@ -1,0 +1,15 @@
+<div ng-init="showSenator()">
+
+	<h1>{{ senator.first_name }} {{ senator.last_name }} - ({{senator.party}})</h1>	
+	<div>
+		I am the {{senator.state_rank}} Senator from {{senator.state_name}}.
+	</div>
+	
+	<div>
+	Contact Sen. {{senator.last_name }} from {{senator.state}} here: <br>
+	
+	Website: <a href="{{ senator.website }}">{{ senator.website }}</a> <br>
+	<!-- Contact From: <a href="{{ senator.contact_form }}">{{ senator.contact_form }}</a> -->
+	</div>
+
+</div>

@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var http = require('http');
-var db = mongojs('myCongress', ['user', 'team', 'league']);
+var db = mongojs('myCongress', ['user', 'team', 'league', 'senator']);
 var request = require('request');
 
 
@@ -62,13 +62,46 @@ var auth = function(request, response, next) {
 app.get('/senators', function(req, resp){
 	console.log("I got a request for senators");
 	// console.log(req);
-	request('https://congress.api.sunlightfoundation.com/legislators?per_page=all&bioguide_id=T000476&title=Sen&in_office=true&apikey=0492ff906e2042c9b4e733b9843ef779', function (error, response, body) {
-  		if (!error && response.statusCode == 200) {
-  			console.log(body);
-  			resp.json(body);
- 		}
+	db.senator.find(function (err, result) {
+		// console.log(result);
+		resp.json(result);
+	});
+	// request('https://congress.api.sunlightfoundation.com/legislators?per_page=all&title=Sen&in_office=true&apikey=0492ff906e2042c9b4e733b9843ef779', function (error, response, body) {
+ //  		if (!error && response.statusCode == 200) {
+ //  			nb = JSON.parse(body);
+ //  			// console.log(nb.results[99].first_name);
+ //  			for(var i = 0; i < nb.results.length; i++){
+ //  				senator = {
+ //  					first_name: nb.results[i].first_name,
+ //  					last_name: nb.results[i].last_name,
+ //  					party: nb.results[i].party,
+ //  					state: nb.results[i].state,
+ //  					state_name: nb.results[i].state_name,
+ //  					state_rank: nb.results[i].state_rank,
+ //  					website: nb.results[i].website,
+ //  					contact_form: nb.results[i].contact_form
+ //  				}
+
+ //  				db.senator.insert(senator, function(err, result){
+ //  					console.log(err);
+ //  					console.log(result);
+ //  					response.json(result);
+ //  				});
+ //  			}
+  			// resp.json();
+ 		// }
+// });
 });
-})
+
+app.get('/senators/:id', function (request, response) {
+	console.log("i got a single sen request");
+	var id = request.params.id;
+
+	db.senator.findOne({_id: mongojs.ObjectId(id)}, function (err, result) {
+			console.log(result);
+			response.json(result);
+		});
+});
  
 
 // console.log("first body" + " " + body.results);

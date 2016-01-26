@@ -1,11 +1,9 @@
 var express 				= require('express');
 var app 						= express();
-var mongojs 				= require('mongojs');
 var bodyParser 			= require('body-parser');
 var passport 				= require('passport');
 var LocalStrategy 	= require('passport-local').Strategy;
 var http 						= require('http');
-var db 							= mongojs('myCongress', ['user', 'team', 'league', 'senator']);
 var request 				= require('request');
 var Router 					= require('./api/api');
 // var session = require('express-session');
@@ -24,7 +22,6 @@ app.use(passport.session());
   // app.use(express.session({ secret: 'myCongress' }));
   // app.use(passport.initialize());
   // app.use(passport.session());
-  // app.use(app.router);
 
 app.use(Router);
 

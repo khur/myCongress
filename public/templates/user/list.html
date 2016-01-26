@@ -1,9 +1,24 @@
 <div class="pure-u-1-4"></div>
 
-<div class="pure-u-1-2">
-	<h2>Users</h2>
+<div class="pure-u-1">
+	
+	<div>
+		<h1>Users</h1>
+		<!-- <form class="pure-form">
+			<input placeholder="Search">
+		</form> -->
+	</div>
+	
 	<ul class="pure-menu-list">
-		<li ng-repeat="user in users" class="pure-menu-item"><a href="#/user/{{ user._id }}">{{user.name}}</a> - {{ user.email}}</li>
+		<li ng-repeat="user in users" class="pure-menu-item team-list-card">
+			<a href="#/user/{{ user._id }}">
+				<h1>{{user.name}}</h1>
+				<p>Email: {{ user.email }}</p>
+				<p>Ranking: </p>
+				<p>Committes: </p>
+				<p>Congress: </p>
+			</a>
+		</li>
 	</ul>
 </div>
 <br><br><br><br>

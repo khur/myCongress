@@ -1,6 +1,9 @@
 <h1>U.S. Senators</h1>
 <div>
     <div class="team-list" >
+    <!-- <form class="pure-form">
+    	<input placeholder="Search">
+    </form> -->
         <div class="team-list-card" ng-repeat="senator in senators">
         	<a href="#/senators/{{ senator._id }}">
 	        	<h1>Sen. {{ senator.first_name }} {{ senator.last_name }} - ({{ senator.party}})</h1> 

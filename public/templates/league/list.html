@@ -1,6 +1,12 @@
-<div>
+<div ng-init="getLeagues()">
+	<h1>Top Congress</h1>
     <ul class="pure-menu-list">
-        <li class="pure-menu-item" ng-repeat="league in leagues"><a href="#/leagues/{{ league._id }}">{{ league.name }}</a></li>
+    <!-- <form class="pure-form">
+    	<input placeholder="Search">
+    </form> -->
+        <li class="pure-menu-item team-list-card" ng-repeat="league in leagues"><a href="#/leagues/{{ league._id }}"><h1>{{ league.name }}</h1> <p>{{ league.slogan }}</p>
+        <p>Owner: {{ league.owner }} </p>
+        <p>Num of Committes: {{ leagueTotal }}</p></a></li>
     </ul>
 </div>
 <br>

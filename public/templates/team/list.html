@@ -1,8 +1,16 @@
 <div>
+    <h1>Top Committes</h1>
     <div class="team-list" >
+    <!-- <form class="pure-form">
+        <input placeholder="Search">
+    </form> -->
         <div class="team-list-card" ng-repeat="team in teams">
-        	<h1><a href="#/teams/{{ team._id }}">{{ team.name }}</a></h1> 
+        <a href="#/teams/{{ team._id }}">
+        	<h1>{{ team.name }}</h1> 
         	<h2>{{ team.slogan }}</h2>
+        	<p>Score:</p>
+        	<p>Ranking:</p>
+        </a>
         </div>
     </div>
 </div>

@@ -24,19 +24,31 @@
     background: rgb(66, 184, 221);
 }
 
+*{
+    color: black; text-decoration: none; margin: 0; padding: 0;
+}
+
 body {
-    background-image: url("../assets/images/bg-capitol.jpg");
+    background: #e9eaed;
     background-position: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    color: white;
+}
 
+#logo{
+    color: white;
+    font-size: 3em;
 }
 
 header{
-    background-color: rgba(0, 0, 0, .4);
-    border-bottom: 3px solid white;
+    background-color: rgba(26, 80, 145, 1);
+    border-bottom: 3px solid rgba(100, 100, 100, .8);
+    padding: 1.5%;
+}
 
+header h1{
+    margin: 0;
+    padding: 1%;
 }
 
 a:visited {
@@ -47,30 +59,30 @@ a:visited {
     width: 75%;
     margin: 1% auto;
     padding: 1%;
-    border: 1px solid white;
+    /*border: 1px solid white;
     border-radius: 5px;
+    background: rgba(0, 0, 0, .4);*/
 }
 
 .login{
     margin: 5% auto;
     width: 28%;
     background: rgba(0, 0, 0, .4);
-    /*border: 1px solid black;*/
+    border: 1px solid rgba(200, 200, 200, .8);
     border-radius: 5px;
-    padding: 1%;
+    padding: 5%;
     color: white;
     text-align: center;
 }
 
 #login-form {
-    width: 60%;
+    width: 100%;
     margin: 0 auto;
 }
 
-#login-form > p > input{
+#login-form > input{
     color: black;
-    margin: 2%;
-
+    margin: .5% auto;
 }
 
 .pure-menu-list{
@@ -78,29 +90,60 @@ a:visited {
 }
 
 .pure-menu-link {
-    color: white;
+    color: black;
     background: inherit;
 
 }
 
+.pure-menu-link{
+    border-radius: 3px;
+}
+
+.pure-menu-link:hover{
+    background: inherit;
+    color: white;
+}
+
+
 .team-list{
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
 
 }
 .team-list-card {
-    background: rgba(255, 255, 255, .3);
+    background: white;
+    /*border: 2px solid rgba(200, 200, 200, .8);*/
+    border-radius: 2px;
+    box-shadow: 2px 3px 1px rgba(200, 200, 200, 1);
+    flex: ;
+    margin-bottom: 10px;
+    padding: 7px;
+    color: black;
+    /*z-index: 99;*/
+}
+
+#loginButtons{
+    text-align: right;
+    float: right;
+}
+
+.senatorCard{
+    background: rgba(215, 215, 215, .5);
+    padding: 3%;
     border-radius: 5px;
-    width: 47.8%;
-    margin: .5%;
+    border: 2px solid rgba(200, 200, 200, .8)
+
+}
+
+.teamShowCard{
+    background: rgba(220, 220, 220, 1);
+    padding: 7px;
+    box-shadow: 2px 2px rgba(200, 200, 200, 1);
+    border-radius: 2px;
+}
+
+.leagueTeamList{
+    color: black;
     padding: .5%;
-    color: red;
-
+    list-style-type: circle;
 }
-
-.team-list-card > h2 {
-    color: blue;
-}
-
-
-

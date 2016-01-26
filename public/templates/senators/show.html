@@ -1,15 +1,21 @@
 <div ng-init="showSenator()">
-
-	<h1>{{ senator.first_name }} {{ senator.last_name }} - ({{senator.party}})</h1>	
-	<div>
-		I am the {{senator.state_rank}} Senator from {{senator.state_name}}.
+	<div class="senatorCard">
+		<div>
+			<h1>{{ senator.first_name }} {{ senator.last_name }} - ({{senator.party}})</h1>	
+			<p>Image here<img src=""></p>
+		</div>
+		<p>
+			I am the {{senator.state_rank}} Senator from {{senator.state_name}}.
+		</p>
+		
+		<p>
+		Contact Sen. {{senator.last_name }} from {{senator.state}} here: <br>
+		
+		Website: <a href="{{ senator.website }}">{{ senator.website }}</a> <br>
+		<p>Ranking: </p>
+		<p>Money Raised: </p>
+		
+		<!-- Contact From: <a href="{{ senator.contact_form }}">{{ senator.contact_form }}</a> -->
+		</p>
 	</div>
-	
-	<div>
-	Contact Sen. {{senator.last_name }} from {{senator.state}} here: <br>
-	
-	Website: <a href="{{ senator.website }}">{{ senator.website }}</a> <br>
-	<!-- Contact From: <a href="{{ senator.contact_form }}">{{ senator.contact_form }}</a> -->
-	</div>
-
 </div>

@@ -7,15 +7,15 @@
 </head>
 <body ng-app="myCongress">
 	<header>
-		<div>
-			<a class="pure-button pure-button-primary" href="#/new">Sign Up</a>
-			<a class="pure-button pure-button-primary" href="#/login">Login</a>
+		<div id='loginButtons'>
+			<a class="pure-button" href="#/new">Sign Up</a>
+			<a class="pure-button" href="#/login">Login</a>
 			<a class="pure-button button-warning" href="#/" ng-click="logout()">Logout</a>
-			<a class="pure-button button-success" href="#/leagues/new" >Create A League</a>
+			<!-- <a class="pure-button button-success" href="#/leagues/new" >Create A League</a> -->
 		</div>
 
 		<div>
-			<h1>myCongress</h1>
+			<h1 id="logo">myCongress</h1>
 		</div>
 
 		<div class="pure-menu pure-menu-horizontal pure-menu-scrollable">
@@ -25,6 +25,7 @@
 				<li class="pure-menu-item"><a class="pure-menu-link" href="#/leagues">Congress</a></li>
 				<li class="pure-menu-item"><a class="pure-menu-link" href="#/teams">Committees</a></li>
 				<li class="pure-menu-item"><a class="pure-menu-link" href="#/senators">Senators</a></li>
+				<li class="pure-menu-item"><a class="pure-menu-link" href="#/leagues/new">Create A Congress</a></li>
 			</ul>
 		</div>
 	</header>
@@ -32,7 +33,7 @@
 	<div id="mainContainer">
 		{{ loginUser }}
 		{{ message }}
-		
+		{{ time }}
 
 		<div ng-view></div>
 

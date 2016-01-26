@@ -1,5 +1,5 @@
 
-<div ng-init="showTeam()">
+<div class="teamShowCard" ng-init="showTeam()">
     <div>
         <h1>{{ team.name }}</h1>
         <h2>{{ team.slogan }}</h2>
@@ -10,6 +10,11 @@
             <li class="pure-menu-item"><a class="pure-menu-link pure-button" href="#/teams/edit/{{ team._id}}">Edit</a></li>
             <li class="pure-menu-item"><a class="pure-menu-link pure-button" ng-click="removeTeam(team._id)">Delete {{ team.name}}</a></li>
         </ul>
+    </div>
+
+    <div>
+        <h2>List of Senators in {{ team.name }}'s committee...</h2>
+        {{ teamSenators }}
     </div>
  <!--    {{ team.league_id }}
 
